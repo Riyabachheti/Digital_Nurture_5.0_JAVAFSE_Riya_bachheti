@@ -1,13 +1,41 @@
-<h3>{{ course.name }}</h3>
+<div
+  [ngClass]="{
+    'card--enrolled': isEnrolled,
+    'card--full': course.credits >= 4
+  }">
 
-<p><strong>ID:</strong> {{ course.id }}</p>
+  <h3>{{ course.name }}</h3>
 
-<p><strong>Code:</strong> {{ course.code }}</p>
+  <p><strong>ID:</strong> {{ course.id }}</p>
 
-<p><strong>Credits:</strong> {{ course.credits }}</p>
+  <p><strong>Code:</strong> {{ course.code }}</p>
 
-<button (click)="enrollRequested.emit(course.id)">
-  Enroll
-</button>
+  <p><strong>Credits:</strong> {{ course.credits }}</p>
 
-<hr>
+  <div [ngSwitch]="course.gradeStatus">
+
+    <p *ngSwitchCase="'passed'" style="color: green;">
+      Passed
+    </p>
+
+    <p *ngSwitchCase="'failed'" style="color: red;">
+      Failed
+    </p>
+
+    <p *ngSwitchDefault style="color: gray;">
+      Pending
+    </p>
+
+  </div>
+
+  <button
+    (click)="
+      isEnrolled = true;
+      enrollRequested.emit(course.id)
+    ">
+    Enroll
+  </button>
+
+  <hr>
+
+</div>
