@@ -1,23 +1,30 @@
-<div *ngIf="isLoading">
-  <p>Loading courses...</p>
-</div>
+<input
+  type="text"
+  placeholder="Search courses"
+  [(ngModel)]="searchTerm"
+  (ngModelChange)="onSearchChange()"
+/>
 
-<div *ngIf="!isLoading">
+<p *ngIf="loading$ | async">
+  Loading courses...
+</p>
 
-  <div *ngIf="courses.length > 0; else noCourses">
+<p *ngIf="error$ | async as error" class="error-message">
+  {{ error }}
+</p>
 
-    <app-course-card
-      *ngFor="let c of courses; let i = index; trackBy: trackByCourseId"
-      [course]="c"
-      (enrollRequested)="onEnroll($event)">
-    </app-course-card>
-
-    <p *ngIf="selectedCourseId">
-      Selected course ID: {{ selectedCourseId }}
-    </p>
-
+<div *ngIf="courses$ | async as courses">
+  <div *ngIf="!loading$ || !(loading$ | async)">
+    <div *ngIf="courses.length > 0; else noCourses">
+      <app-course-card
+        *ngFor="let c of courses; trackBy: trackByCourseId"
+        [course]="c"
+        [isEnrolled]="(enrolledIds$ | async)?.includes(c.id) ?? false"
+        (enrollRequested)="onEnroll($event)"
+        (click)="viewCourse(c.id)">
+      </app-course-card>
+    </div>
   </div>
-
 </div>
 
 <ng-template #noCourses>

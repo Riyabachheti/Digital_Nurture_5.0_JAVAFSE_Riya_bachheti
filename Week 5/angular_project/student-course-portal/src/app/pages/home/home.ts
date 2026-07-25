@@ -3,15 +3,22 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CourseSummaryWidget } from '../../components/course-summary-widget/course-summary-widget';
+import { CourseService } from '../../services/course';
+import { Notification } from '../../components/notification/notification';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    CourseSummaryWidget,
+    Notification
+  ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
-
+  constructor(private courseService: CourseService) {}
   portalName = 'Student Course Portal';
 
   isPortalActive = true;
@@ -23,7 +30,12 @@ export class Home implements OnInit, OnDestroy {
   availableCourses = 0;
 
   ngOnInit(): void {
-    this.availableCourses = 12;
+    this.courseService.getCourses().subscribe({
+      next: (courses) => {
+        this.availableCourses = courses.length;
+      }
+    });
+
     console.log('HomeComponent initialised — courses loaded');
   }
 

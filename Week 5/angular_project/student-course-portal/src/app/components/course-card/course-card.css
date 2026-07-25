@@ -5,3 +5,6 @@
 .card--full {
   border: 2px solid orange;
 }
+.expanded {
+  min-height: 250px;
+}

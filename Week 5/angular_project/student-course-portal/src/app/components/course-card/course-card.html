@@ -1,41 +1,45 @@
 <div
-  [ngClass]="{
-    'card--enrolled': isEnrolled,
-    'card--full': course.credits >= 4
-  }">
-
+  appHighlight="lightblue"
+  [ngClass]="cardClasses"
+  [ngStyle]="{
+    'border-left': '6px solid ' +
+      (course.gradeStatus === 'passed'
+        ? 'green'
+        : course.gradeStatus === 'failed'
+          ? 'red'
+          : 'gray')
+  }"
+>
   <h3>{{ course.name }}</h3>
 
   <p><strong>ID:</strong> {{ course.id }}</p>
-
   <p><strong>Code:</strong> {{ course.code }}</p>
-
-  <p><strong>Credits:</strong> {{ course.credits }}</p>
+  <p><strong>Credits:</strong> {{ course.credits | creditLabel }}</p>
 
   <div [ngSwitch]="course.gradeStatus">
-
-    <p *ngSwitchCase="'passed'" style="color: green;">
-      Passed
-    </p>
-
-    <p *ngSwitchCase="'failed'" style="color: red;">
-      Failed
-    </p>
-
-    <p *ngSwitchDefault style="color: gray;">
-      Pending
-    </p>
-
+    <p *ngSwitchCase="'passed'" style="color: green">Passed</p>
+    <p *ngSwitchCase="'failed'" style="color: red">Failed</p>
+    <p *ngSwitchDefault style="color: gray">Pending</p>
   </div>
 
   <button
-    (click)="
-      isEnrolled = true;
-      enrollRequested.emit(course.id)
-    ">
+    *ngIf="!isEnrolled; else unenrollButton"
+    (click)="enroll($event)"
+  >
     Enroll
   </button>
 
-  <hr>
+  <ng-template #unenrollButton>
+    <button (click)="unenroll($event)">
+      Unenroll
+    </button>
+  </ng-template>
 
+  <button (click)="toggleDetails($event)">
+    {{ isExpanded ? 'Hide Details' : 'Show Details' }}
+  </button>
+
+  <div *ngIf="isExpanded">
+    <p>This course contains lectures, assignments and quizzes.</p>
+  </div>
 </div>

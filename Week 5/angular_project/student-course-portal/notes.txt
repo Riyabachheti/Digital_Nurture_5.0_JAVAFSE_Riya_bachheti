@@ -21,3 +21,7 @@ Defines the root component that controls the main user interface of the applicat
 
 src/index.html
 The main HTML page that hosts the Angular application.
+
+Build budgets:
+The initial application bundle gives a warning above 500 kB and fails the production build above 1 MB.
+Any individual component stylesheet gives a warning above 4 kB and fails above 8 kB.

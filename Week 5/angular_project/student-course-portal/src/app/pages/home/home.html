@@ -1,4 +1,12 @@
-<h1>{{ portalName }}</h1>
+<h1>Welcome to {{ portalName }}</h1>
+<p>Manage your courses, enrollments, and academic progress in one place.</p>
+<app-course-summary-widget></app-course-summary-widget>
+<app-notification></app-notification>
+<div class="stats-row">
+  <p>Courses Available: {{ availableCourses }}</p>
+  <p>Enrolled: 3</p>
+  <p>GPA: 3.8</p>
+</div>
 
 <button
   [disabled]="!isPortalActive"
